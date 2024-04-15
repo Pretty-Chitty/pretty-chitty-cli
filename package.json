@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
+  "module": "es2022",
   "bin": {
     "pretty-chitty-cli": "./bin/run.js"
   },
@@ -27,7 +28,9 @@
     "@types/tmp": "^0.2.6",
     "babel-loader": "^9.1.3",
     "babel-plugin-transform-typescript-metadata": "^0.3.2",
+    "chokidar": "^3.6.0",
     "color": "^4.2.3",
+    "css-loader": "^7.1.1",
     "eslint": "^8.56.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-react": "^7.33.2",
@@ -41,6 +44,7 @@
     "reflect-metadata": "^0.1.14",
     "sharp": "^0.32.6",
     "spritesmith": "^3.4.1",
+    "style-loader": "^4.0.0",
     "tmp": "^0.2.1",
     "tmp-promise": "^3.0.3",
     "ts-jest": "^29.1.1",

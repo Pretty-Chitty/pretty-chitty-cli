@@ -44,25 +44,37 @@ export default (env) => {
     module: {
       rules: [
         {
-          test: /\.(ts|tsx|js)$/,
+          test: /\.(ts|tsx)$/,
           use: {
             loader: "babel-loader",
             options: {
               presets: ["@babel/preset-env", "@babel/preset-react", "@babel/preset-typescript"],
               plugins: [
-                // "@babel/plugin-transform-typescript",
-                // ["@babel/plugin-syntax-decorators", { legacy: true }],
                 isDevelopment && ReactRefreshBabel,
 
                 "babel-plugin-transform-typescript-metadata",
                 ["@babel/plugin-proposal-decorators", { legacy: true }],
                 ["@babel/plugin-proposal-class-properties", { loose: true }],
-                // ["@babel/plugin-proposal-decorators", { version: "2023-05" }],
+                ["@babel/plugin-transform-private-methods", { loose: true }],
+                ["@babel/plugin-transform-private-property-in-object", { loose: true }],
               ].filter(Boolean),
 
               sourceMaps: true,
             },
           },
+        },
+        {
+          test: /\.(js)$/,
+          use: {
+            loader: "babel-loader",
+            options: {
+              presets: ["@babel/preset-env", "@babel/preset-react"],
+              plugins: [isDevelopment && ReactRefreshBabel].filter(Boolean),
+
+              sourceMaps: true,
+            },
+          },
+
           exclude: /node_modules/,
         },
         {
@@ -87,8 +99,14 @@ export default (env) => {
         },
       ],
     },
+
+    optimization: {
+      usedExports: true, // Enable tree shaking
+    },
     resolve: {
       extensions: [".tsx", ".ts", ".js"],
+
+      symlinks: false,
     },
   };
 };
