@@ -1,0 +1,22 @@
+{
+  "name": "mancala",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Josh Breckman <jbreckman@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "three": "^0.158.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "pretty-chitty": "link:../pretty-chitty"
+  },
+  "devDependencies": {
+    "pretty-chitty-cli": "link:../pretty-chitty-cli",
+    "@types/react": "^18.2.34",
+    "@types/react-dom": "^18.2.14",
+    "@types/three": "^0.158.1"
+  },
+  "scripts": {
+    "start": "pretty-chitty-cli watch"
+  }
+}
