@@ -1,13 +1,4 @@
-import {
-  Game,
-  PlayerInfo,
-  Chit,
-  Turn,
-  GameTheme,
-  ChitRenderSpec,
-  LightSpec,
-  StaticImage,
-} from "pretty-chitty";
+import { Game, PlayerInfo, Chit, Turn, GameTheme, ChitRenderSpec, LightSpec, StaticImage } from "pretty-chitty";
 import { Mesh, MeshPhongMaterial, PlaneGeometry } from "three";
 
 import * as ChitLibrary from "./ChitLibrary";
@@ -18,7 +9,7 @@ import { FlipButton } from "./ButtonLibrary";
 import { Card, MyPlayer, Root } from "./ChitLibrary";
 import { table } from "./assets/environment";
 
-export class DemoGame implements Game<MyPlayer, Root> {
+export default class GAME_NAME implements Game<MyPlayer, Root> {
   name = "Demo Game";
 
   chitLibrary = ChitLibrary;
@@ -27,11 +18,7 @@ export class DemoGame implements Game<MyPlayer, Root> {
 
   theme = GameTheme.withDefaults("#2d3142", "#ef8354");
 
-  async run(
-    players: MyPlayer[],
-    setup: Turn<any, MyPlayer, Root>,
-    rootChit: Root
-  ) {
+  async run(players: MyPlayer[], setup: Turn<any, MyPlayer, Root>, rootChit: Root) {
     players[0].color = "#ed00cb";
     players[1].color = "#00edcb";
 
@@ -67,12 +54,7 @@ export class DemoGame implements Game<MyPlayer, Root> {
 
       // alternating players
       await setup.createTurn(
-        [
-          ...pieces,
-          ...pieces2,
-          rootChit.mainBoard,
-          ...players.map((p) => p.counter),
-        ],
+        [...pieces, ...pieces2, rootChit.mainBoard, ...players.map((p) => p.counter)],
         player,
         async (turn) => {
           let lastPiece: Card | undefined;
@@ -117,7 +99,7 @@ export class DemoGame implements Game<MyPlayer, Root> {
 
   renderDefaultRootChit(spec: ChitRenderSpec): void {
     const scale = { rx: 25, ry: 25 };
-    spec.ornament = new Mesh(
+    const mesh = new Mesh(
       new PlaneGeometry(100, 100),
       new MeshPhongMaterial({
         map: StaticImage.from(table, scale),
@@ -125,7 +107,8 @@ export class DemoGame implements Game<MyPlayer, Root> {
         bumpScale: 30,
       })
     );
-    spec.ornament.position.z = -0.02;
+    mesh.position.z = -0.02;
+    spec.ornaments.push(mesh);
     spec.lightSpec = LightSpec.realistic();
   }
 }

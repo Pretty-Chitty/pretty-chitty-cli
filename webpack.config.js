@@ -27,7 +27,7 @@ export default (env) => {
         isDevelopment && new webpack.HotModuleReplacementPlugin(),
         isDevelopment &&
           new HtmlWebpackPlugin({
-            template: "./build/index.html", // Path to your index.html file
+            template: path.join(env.WORKING_DIR, "./build/index.html"), // Path to your index.html file
           }),
       ].filter(Boolean),
       ,

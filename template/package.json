@@ -1,13 +1,14 @@
 {
-  "name": "mancala",
+  "name": "GAME_NAME",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "src/GAME_NAME.ts",
   "author": "Josh Breckman <jbreckman@gmail.com>",
   "license": "MIT",
   "dependencies": {
     "three": "^0.158.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "color": "^4.2.3",
     "pretty-chitty": "link:../pretty-chitty"
   },
   "devDependencies": {
