@@ -1,56 +1,20 @@
 import { BoxGeometry, Mesh, MeshPhongMaterial } from "three";
-import {
-  RootChit,
-  PlayerChit,
-  DropdownChit,
-  SparkChit,
-  ChildOutlet,
-  Chit,
-  ChitRenderSpec,
-} from "pretty-chitty";
+import { RootChit, PlayerChit, DropdownChit, SparkChit, ChildOutlet, Chit, ChitRenderSpec } from "pretty-chitty";
 
-import { cityscape2 } from "./assets/network_overload";
-import { SampleStack } from "./CanvasLibrary";
 import { PlayerAid } from "./PlayerAids";
 
 export * from "./PlayerAids";
 
-export class Card extends Chit {
-  public something: number = 2;
-  public tapped: boolean = false;
-  public flipped: boolean = false;
-  public x = 0;
-  public y = 0;
-
-  @ChildOutlet public subCard?: Card;
-
+export class Box extends Chit {
   public override render(spec: ChitRenderSpec): void {
-    const boxGeometry = new BoxGeometry(1, 2, 0.1);
-
-    const ts = new SampleStack().set((obj) => {
-      obj.title = "#" + this.something * 2;
-    });
-
-    const face = new MeshPhongMaterial({
-      bumpMap: ts.get().texture,
-      bumpScale: 1,
-      map: ts.get().texture,
-    });
-
+    const boxGeometry = new BoxGeometry(1, 1, 1);
     const side = new MeshPhongMaterial({
       color: 0xbbbbbb,
     });
 
-    spec.object = new Mesh(boxGeometry, [side, side, side, side, face, side]);
+    spec.object = new Mesh(boxGeometry, [side, side, side, side, side, side]);
     spec.object.receiveShadow = true;
     spec.object.castShadow = true;
-
-    spec.rotateZ = this.tapped ? Math.PI / 2 : 0;
-    spec.rotateY = this.flipped ? Math.PI : 0;
-    spec.offsetZ = this.flipped ? 0.1 : 0;
-    spec.offsetX = this.x * 1.25;
-    spec.offsetY = this.y * 2.5;
-    spec.offsetZ = this.tapped ? 0.25 : 0 + (this.flipped ? 3.1 : 0);
   }
 }
 
@@ -59,9 +23,6 @@ export class CounterChit extends SparkChit {
 
   public get icon() {
     return this.player;
-  }
-  public get headerIcon() {
-    return cityscape2;
   }
 }
 
