@@ -1,5 +1,6 @@
 import create from "./create";
 import watch from "./watch";
+import link from "./link";
 
 export async function cli(): Promise<void> {
   const [, , command] = process.argv;
@@ -11,6 +12,10 @@ export async function cli(): Promise<void> {
     }
     case "watch": {
       await watch();
+      break;
+    }
+    case "link": {
+      await link();
       break;
     }
   }
