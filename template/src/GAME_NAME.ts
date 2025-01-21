@@ -1,4 +1,14 @@
-import { Game, PlayerInfo, Chit, Turn, GameTheme, ChitRenderSpec, LightSpec, StaticImage } from "pretty-chitty";
+import {
+  Game,
+  PlayerInfo,
+  Chit,
+  GameResult,
+  Turn,
+  GameTheme,
+  ChitRenderSpec,
+  LightSpec,
+  StaticImage,
+} from "pretty-chitty";
 import { Mesh, MeshPhongMaterial, PlaneGeometry } from "three";
 
 import * as ChitLibrary from "./ChitLibrary";
@@ -18,7 +28,7 @@ export default class GAME_NAME implements Game<MyPlayer, Root> {
 
   theme = GameTheme.withDefaults("#2d3142", "#ef8354");
 
-  async run(players: MyPlayer[], setup: Turn<any, MyPlayer, Root>, rootChit: Root) {
+  async run(players: MyPlayer[], setup: Turn<GameResult<MyPlayer>, MyPlayer, Root>, rootChit: Root) {
     players[0].color = "#ed00cb";
     players[1].color = "#00edcb";
 

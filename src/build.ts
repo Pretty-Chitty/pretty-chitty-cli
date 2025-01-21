@@ -2,35 +2,17 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { spawn } from "child_process";
 import { URL } from "url";
-import chokidar from "chokidar";
 import { processDirectory } from "./resizer";
 import { readdir } from "fs/promises";
 import { createFiles } from "./createFiles";
 
-// Function to extract the first subdirectory under a given base directory from a full path
-function getFirstSubdirectory(baseDir: string, filePath: string) {
-  // Get the relative path from baseDir to filePath
-  const relativePath = path.relative(baseDir, filePath);
-
-  // Split the relative path by path separator to get individual components
-  const pathParts = relativePath.split(path.sep);
-
-  // Return the first part, which is the direct subdirectory under baseDir
-  return pathParts[0];
-}
-
-function setupFileWatcher() {
+async function setupFileWatcher() {
   const ASSETS_DIR = "src/assets";
-  const fileWatcher = chokidar.watch(ASSETS_DIR, {
-    ignored: /^(src\/assets\/output)|(\.ts)$/,
-    persistent: true,
-    ignoreInitial: true,
-  });
 
   const processing: { [key: string]: boolean } = {};
   const needsReprocessing: { [key: string]: boolean } = {};
 
-  function process(folderName: string) {
+  async function process(folderName: string) {
     if (processing[folderName]) {
       needsReprocessing[folderName] = true;
       return;
@@ -38,36 +20,26 @@ function setupFileWatcher() {
 
     needsReprocessing[folderName] = false;
     processing[folderName] = true;
-    processDirectory(path.join(ASSETS_DIR, folderName), ASSETS_DIR)
+    await processDirectory(path.join(ASSETS_DIR, folderName), ASSETS_DIR)
       .catch(console.error)
-      .finally(() => {
+      .finally(async () => {
         processing[folderName] = false;
         if (needsReprocessing[folderName]) {
-          process(folderName);
+          await process(folderName);
         }
       });
   }
 
-  const handler = (p: string) => {
-    const folderName = getFirstSubdirectory(ASSETS_DIR, p);
-    console.log(`Saw change in ${folderName}`, p);
-    process(folderName);
-  };
-
-  fileWatcher.on("change", handler);
-  fileWatcher.on("add", handler);
-  fileWatcher.on("unlink", handler);
-
-  readdir(ASSETS_DIR, { withFileTypes: true }).then((list) => {
+  await readdir(ASSETS_DIR, { withFileTypes: true }).then(async (list) => {
     for (let i = 0; i < list.length; i++) {
       if (list[i].isDirectory() && list[i].name !== "output") {
-        process(list[i].name);
+        await process(list[i].name);
       }
     }
   });
 }
 
-export default async function runWebpackWatch() {
+export default async function runWebpackBuild() {
   await createFiles();
 
   setupFileWatcher();
@@ -96,12 +68,14 @@ export default async function runWebpackWatch() {
     "node",
     [
       webpackPath,
-      "server",
+      "build",
       `--config=${webpackConfigPath}`,
       `--env`,
       `WORKING_DIR=${process.cwd()}`,
       `--env`,
-      `TARGET_ENV=dev`,
+      `TARGET_ENV=prod`,
+      `--env`,
+      `ENTRY_NAME=game123.js`,
     ],
     {
       cwd: path.join(__dirname, "../"),

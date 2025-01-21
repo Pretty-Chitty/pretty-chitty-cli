@@ -1,6 +1,7 @@
 import create from "./create";
 import watch from "./watch";
 import link from "./link";
+import runWebpackBuild from "./build";
 
 export async function cli(): Promise<void> {
   const [, , command] = process.argv;
@@ -16,6 +17,10 @@ export async function cli(): Promise<void> {
     }
     case "link": {
       await link();
+      break;
+    }
+    case "build": {
+      await runWebpackBuild();
       break;
     }
   }

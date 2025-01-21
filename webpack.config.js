@@ -1,25 +1,32 @@
 import path from "path";
 import webpack from "webpack";
+import TerserPlugin from "terser-webpack-plugin";
 import HtmlWebpackPlugin from "html-webpack-plugin";
 import ReactRefreshWebpackPlugin from "@pmmmwh/react-refresh-webpack-plugin";
 import ReactRefreshBabel from "react-refresh/babel";
 
-const isDevelopment = true; // process.env.NODE_ENV !== "production";
 const dist = path.join(process.cwd(), "dist");
 
 console.log(dist);
 export default (env) => {
+  const isDevelopment = env.TARGET_ENV === "dev";
+  const sourceMaps = true;
   console.log("working dir", env.WORKING_DIR);
   return {
     mode: isDevelopment ? "development" : "production",
 
-    entry: path.join(env.WORKING_DIR, "./build/index.tsx"),
+    experiments: isDevelopment
+      ? undefined
+      : {
+          outputModule: true,
+        },
+    entry: path.join(env.WORKING_DIR, isDevelopment ? "./build/index.tsx" : "./build/entry.tsx"),
     output: {
       path: dist,
-      umdNamedDefine: true,
-      library: "game",
-      libraryTarget: "umd",
-      filename: "game.js",
+      umdNamedDefine: isDevelopment,
+      library: isDevelopment ? "game" : undefined,
+      libraryTarget: isDevelopment ? "umd" : "module",
+      filename: isDevelopment ? "game.js" : env.ENTRY_NAME, // todo: make unique per build?
     },
     plugins: [
       ...[
@@ -32,7 +39,7 @@ export default (env) => {
       ].filter(Boolean),
       ,
     ],
-    devtool: "source-map",
+    devtool: sourceMaps ? "source-map" : undefined,
     devServer: {
       static: "./dist",
       hot: true,
@@ -40,6 +47,9 @@ export default (env) => {
       devMiddleware: { writeToDisk: true },
       allowedHosts: "all",
       compress: true,
+      headers: {
+        "Access-Control-Allow-Origin": "*", // Allow all origins
+      },
     },
     module: {
       rules: [
@@ -59,7 +69,7 @@ export default (env) => {
                 ["@babel/plugin-transform-private-property-in-object", { loose: true }],
               ].filter(Boolean),
 
-              sourceMaps: true,
+              sourceMaps: sourceMaps,
             },
           },
         },
@@ -71,7 +81,7 @@ export default (env) => {
               presets: ["@babel/preset-env", "@babel/preset-react"],
               plugins: [isDevelopment && ReactRefreshBabel].filter(Boolean),
 
-              sourceMaps: true,
+              sourceMaps: sourceMaps,
             },
           },
 
@@ -101,7 +111,14 @@ export default (env) => {
     },
 
     optimization: {
-      usedExports: true, // Enable tree shaking
+      minimizer: [
+        new TerserPlugin({
+          terserOptions: {
+            keep_fnames: true,
+            keep_classnames: true,
+          },
+        }),
+      ],
     },
     resolve: {
       extensions: [".tsx", ".ts", ".js"],
