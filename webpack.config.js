@@ -7,10 +7,10 @@ import ReactRefreshBabel from "react-refresh/babel";
 
 const dist = path.join(process.cwd(), "dist");
 
-console.log(dist);
 export default (env) => {
   const isDevelopment = env.TARGET_ENV === "dev";
   const sourceMaps = true;
+
   console.log("working dir", env.WORKING_DIR);
   return {
     mode: isDevelopment ? "development" : "production",
@@ -22,11 +22,11 @@ export default (env) => {
         },
     entry: path.join(env.WORKING_DIR, isDevelopment ? "./build/index.tsx" : "./build/entry.tsx"),
     output: {
-      path: dist,
+      path: isDevelopment ? dist : path.join(env.WORKING_DIR, "./dist"),
       umdNamedDefine: isDevelopment,
       library: isDevelopment ? "game" : undefined,
       libraryTarget: isDevelopment ? "umd" : "module",
-      filename: isDevelopment ? "game.js" : env.ENTRY_NAME, // todo: make unique per build?
+      filename: isDevelopment ? "game.js" : "game.[contenthash].js",
     },
     plugins: [
       ...[
@@ -37,7 +37,6 @@ export default (env) => {
             template: path.join(env.WORKING_DIR, "./build/index.html"), // Path to your index.html file
           }),
       ].filter(Boolean),
-      ,
     ],
     devtool: sourceMaps ? "source-map" : undefined,
     devServer: {

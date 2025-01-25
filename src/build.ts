@@ -3,7 +3,7 @@ import { fileURLToPath } from "url";
 import { spawn } from "child_process";
 import { URL } from "url";
 import { processDirectory } from "./resizer";
-import { readdir } from "fs/promises";
+import { readdir, rm } from "fs/promises";
 import { createFiles } from "./createFiles";
 
 async function setupFileWatcher() {
@@ -57,6 +57,14 @@ export default async function runWebpackBuild() {
     console.error(error);
     console.error("Could not find webpack in the current project.");
     return;
+  }
+
+  const distPath = path.join(process.cwd(), "dist");
+  try {
+    await rm(distPath, { recursive: true, force: true });
+    console.log(`Deleted contents of ${distPath}`);
+  } catch (error) {
+    console.error(`Error deleting contents of ${distPath}:`, error);
   }
 
   console.log(webpackPath);

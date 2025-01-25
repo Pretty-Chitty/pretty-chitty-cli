@@ -1,0 +1,9 @@
+{
+  "id": "GAME_NAME",
+  "name": "GAME_NAME",
+  "major": 0,
+  "description": "Description here",
+  "maxPlayers": 2,
+  "minPlayers": 2,
+  "version": "0.1"
+}
