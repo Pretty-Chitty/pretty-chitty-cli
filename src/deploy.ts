@@ -29,6 +29,7 @@ export default async function runDeploy(ftpSettings: FtpSettings, ftpBasePath: s
     const gameTheme = gameInstance.theme;
 
     gameJson.backgroundColor = gameTheme.backgroundColor;
+    gameJson.foregroundColor = gameTheme.barActiveTextColor;
 
     const entryUrl = publicUrlPath + entryFile;
     const nodeUrl = publicUrlPath + nodeFile;
