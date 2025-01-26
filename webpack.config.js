@@ -9,10 +9,12 @@ const dist = path.join(process.cwd(), "dist");
 
 export default (env) => {
   const isDevelopment = env.TARGET_ENV === "dev";
+  const isNode = !!env.IS_NODE;
   const sourceMaps = true;
 
   console.log("working dir", env.WORKING_DIR);
   return {
+    target: isNode ? "node" : undefined,
     mode: isDevelopment ? "development" : "production",
 
     experiments: isDevelopment
@@ -22,11 +24,13 @@ export default (env) => {
         },
     entry: path.join(env.WORKING_DIR, isDevelopment ? "./build/index.tsx" : "./build/entry.tsx"),
     output: {
+      chunkFormat: isNode ? "commonjs" : undefined,
+
       path: isDevelopment ? dist : path.join(env.WORKING_DIR, "./dist"),
       umdNamedDefine: isDevelopment,
       library: isDevelopment ? "game" : undefined,
       libraryTarget: isDevelopment ? "umd" : "module",
-      filename: isDevelopment ? "game.js" : "game.[contenthash].js",
+      filename: isDevelopment ? "game.js" : `${isNode ? "node" : "game"}.[contenthash].js`,
     },
     plugins: [
       ...[
@@ -106,7 +110,7 @@ export default (env) => {
             },
           ],
         },
-      ],
+      ].filter((a) => a),
     },
 
     optimization: {

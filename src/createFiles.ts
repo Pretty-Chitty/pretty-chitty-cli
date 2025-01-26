@@ -69,6 +69,8 @@ export async function createFiles() {
           const game = new Game();
           root.render(<ClientTrustMatchViewer game={game} playerId={playerId} players={players} matchStorage={storage} onBack={onBack} />);
         }
+
+        export { Game };
         `,
       },
     ];

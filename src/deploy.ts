@@ -16,14 +16,25 @@ export default async function runDeploy(ftpSettings: FtpSettings, ftpBasePath: s
     const distPath = path.join(process.cwd(), "dist");
     const files = fs.readdirSync(distPath);
     const entryFile = files.find((file) => file.startsWith("game.") && file.endsWith(".js"));
+    const nodeFile = files.find((file) => file.startsWith("node.") && file.endsWith(".js"));
 
-    if (!entryFile) {
+    if (!entryFile || !nodeFile) {
       throw new Error("Entry file not found in the dist folder");
     }
 
-    const entryUrl = publicUrlPath + entryFile;
+    const entryFilePath = path.join(distPath, nodeFile);
+    const m = await import(entryFilePath);
+    const Game = m.Game;
+    const gameInstance = new Game();
+    const gameTheme = gameInstance.theme;
 
-    gameJson.entry = entryUrl;
+    gameJson.backgroundColor = gameTheme.backgroundColor;
+
+    const entryUrl = publicUrlPath + entryFile;
+    const nodeUrl = publicUrlPath + nodeFile;
+
+    gameJson.webEntry = entryUrl;
+    gameJson.nodeEntry = nodeUrl;
 
     console.log(JSON.stringify(gameJson, null, 2));
 

@@ -82,8 +82,6 @@ export default async function runWebpackBuild() {
       `WORKING_DIR=${process.cwd()}`,
       `--env`,
       `TARGET_ENV=prod`,
-      `--env`,
-      `ENTRY_NAME=game123.js`,
     ],
     {
       cwd: path.join(__dirname, "../"),
@@ -103,5 +101,33 @@ export default async function runWebpackBuild() {
   // Handle the close event
   webpackProcess.on("close", (code: string) => {
     console.log(`child process exited with code ${code}`);
+
+    const isNodeProcess = spawn(
+      "node",
+      [
+        webpackPath,
+        "build",
+        `--config=${webpackConfigPath}`,
+        `--env`,
+        `WORKING_DIR=${process.cwd()}`,
+        `--env`,
+        `TARGET_ENV=prod`,
+        `--env`,
+        `IS_NODE=true`,
+      ],
+      {
+        cwd: path.join(__dirname, "../"),
+      }
+    );
+
+    // Handle normal output
+    isNodeProcess.stdout.on("data", (data: string) => {
+      console.log(`stdout: ${data}`);
+    });
+
+    // Handle error output
+    isNodeProcess.stderr.on("data", (data: string) => {
+      console.error(`stderr: ${data}`);
+    });
   });
 }
