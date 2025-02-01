@@ -5,6 +5,7 @@ import runWebpackBuild from "./build";
 import runDeploy from "./deploy";
 import inquirer from "inquirer";
 import fs from "fs";
+import { processDirectory } from "./resizer";
 
 export async function cli(): Promise<void> {
   const [, , command] = process.argv;
@@ -12,6 +13,10 @@ export async function cli(): Promise<void> {
   switch (command) {
     case "create": {
       await create();
+      break;
+    }
+    case "spritemap": {
+      await processDirectory(process.argv[3], process.argv[4]);
       break;
     }
     case "watch": {

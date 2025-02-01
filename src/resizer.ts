@@ -247,7 +247,15 @@ export async function processDirectory(directory: string, targetDirectory: strin
     // eat it.
   }
 
-  const microFileName = path.join(targetDirectory, "output", `${path.basename(directory)}_microinline.jpg`);
+  if (files.find((file) => file.format === "png")) {
+    microFile.format = "png";
+  }
+
+  const microFileName = path.join(
+    targetDirectory,
+    "output",
+    `${path.basename(directory)}_microinline.${microFile.format}`
+  );
   Object.entries(await processSprite(microFile, microFileName)).forEach(([key, value]) => {
     const result = fileResults[tmpToFileName[key]];
     result.micro = {

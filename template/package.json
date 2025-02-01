@@ -19,6 +19,8 @@
   },
   "scripts": {
     "start": "pretty-chitty-cli watch",
-    "link": "pretty-chitty-cli link && yarn"
+    "link": "pretty-chitty-cli link && yarn",
+    "build": "pretty-chitty-cli build",
+    "deploy": "pretty-chitty-cli deploy"
   }
 }

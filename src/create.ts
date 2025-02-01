@@ -85,6 +85,7 @@ export default async function create() {
   // fix package.json
   await replaceGameName(path.join(destDirectory, "package.json"), name);
   await replaceGameName(path.join(destDirectory, "src/GAME_NAME.ts"), name);
+  await replaceGameName(path.join(destDirectory, "game.json"), name);
   await fs.rename(path.join(destDirectory, "src/GAME_NAME.ts"), path.join(destDirectory, `src/${name}.ts`));
 
   process.exit();

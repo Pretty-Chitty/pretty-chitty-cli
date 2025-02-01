@@ -12,6 +12,8 @@ export default async function runDeploy(ftpSettings: FtpSettings, ftpBasePath: s
   try {
     const gameJsonPath = path.join(process.cwd(), "game.json");
     const gameJson = JSON.parse(fs.readFileSync(gameJsonPath, "utf-8"));
+    gameJson.version = gameJson.version.replace(/([0-9]+?)$/, (d: string) => parseInt(d) + 1); // autobump version
+    fs.writeFileSync(gameJsonPath, JSON.stringify(gameJson, null, "  "));
 
     const distPath = path.join(process.cwd(), "dist");
     const files = fs.readdirSync(distPath);
