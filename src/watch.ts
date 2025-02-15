@@ -31,6 +31,10 @@ function setupFileWatcher() {
   const needsReprocessing: { [key: string]: boolean } = {};
 
   function process(folderName: string) {
+    if (folderName.startsWith(".")) {
+      return;
+    }
+
     if (processing[folderName]) {
       needsReprocessing[folderName] = true;
       return;
@@ -50,6 +54,10 @@ function setupFileWatcher() {
 
   const handler = (p: string) => {
     const folderName = getFirstSubdirectory(ASSETS_DIR, p);
+    if (folderName.startsWith(".")) {
+      return;
+    }
+
     console.log(`Saw change in ${folderName}`, p);
     process(folderName);
   };

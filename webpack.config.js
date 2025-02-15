@@ -24,7 +24,7 @@ export default (env) => {
         },
     entry: path.join(env.WORKING_DIR, isDevelopment ? "./build/index.tsx" : "./build/entry.tsx"),
     output: {
-      chunkFormat: isNode ? "commonjs" : undefined,
+      chunkFormat: isNode ? "module" : undefined,
 
       path: isDevelopment ? dist : path.join(env.WORKING_DIR, "./dist"),
       umdNamedDefine: isDevelopment,
