@@ -1,9 +1,9 @@
 import React from "react";
-
 import { Color, Layered, Text } from "pretty-chitty/ReactCanvas";
 import { ParameterizedCanvas } from "pretty-chitty";
 
 // can be defined here?
+
 export class SampleStack extends ParameterizedCanvas {
   title = "default title";
   width = 200;

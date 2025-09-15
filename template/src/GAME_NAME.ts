@@ -11,20 +11,26 @@ import {
 } from "pretty-chitty";
 import { Mesh, MeshPhongMaterial, PlaneGeometry } from "three";
 
-import * as ChitLibrary from "./ChitLibrary";
-import * as CanvasLibrary from "./CanvasLibrary";
-import * as ButtonLibrary from "./ButtonLibrary";
-
-import { FlipButton } from "./ButtonLibrary";
-import { Box, MyPlayer, Root } from "./ChitLibrary";
+import { FlipButton } from "./buttons/FlipButton";
+import { Root } from "./chits/Root";
+import { MyPlayer } from "./chits/MyPlayer";
+import { Box } from "./chits/Box";
 import { table } from "./assets/environment";
+import { CounterChit } from "./chits/CounterChit";
+import { MainBoard } from "./chits/MainBoard";
+import { PlayerAid } from "./chits/PlayerAid";
+import { SampleStack } from "./canvas/SampleStack";
 
 export default class GAME_NAME implements Game<MyPlayer, Root> {
   name = "GAME_NAME";
 
-  chitLibrary = ChitLibrary;
-  canvasLibrary = CanvasLibrary;
-  buttonLibrary = ButtonLibrary;
+  galleryItemWidth = 300;
+  galleryItemSpacing = 20;
+  showGrid = true;
+
+  chitLibrary = { Box, CounterChit, MainBoard, MyPlayer, PlayerAid, Root };
+  canvasLibrary = { SampleStack };
+  buttonLibrary = { FlipButton };
 
   theme = GameTheme.withDefaults("#2d3142", "#ef8354");
 
