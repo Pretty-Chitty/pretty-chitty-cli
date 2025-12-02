@@ -21,20 +21,27 @@ import { MainBoard } from "./chits/MainBoard";
 import { PlayerAid } from "./chits/PlayerAid";
 import { SampleStack } from "./canvas/SampleStack";
 
+const theme = GameTheme.withDefaults("#2d3142", "#ef8354");
+
 export default class GAME_NAME implements Game<MyPlayer, Root> {
   name = "GAME_NAME";
 
   galleryItemWidth = 300;
   galleryItemSpacing = 20;
-  showGrid = true;
 
   chitLibrary = { Box, CounterChit, MainBoard, MyPlayer, PlayerAid, Root };
   canvasLibrary = { SampleStack };
   buttonLibrary = { FlipButton };
 
-  theme = GameTheme.withDefaults("#2d3142", "#ef8354");
+  theme = theme;
 
-  async run(players: MyPlayer[], setup: Turn<GameResult<MyPlayer>, MyPlayer, Root>, rootChit: Root) {
+  tokenMap = {
+    some_icon: { image: table },
+  };
+
+  async run(setup: Turn<GameResult<MyPlayer>, MyPlayer, Root>, rootChit: Root) {
+    await rootChit.players.shuffle();
+    const players = rootChit.players.copy();
     players[0].color = "#ed00cb";
     players[1].color = "#00edcb";
 

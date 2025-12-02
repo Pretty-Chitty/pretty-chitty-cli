@@ -25,7 +25,9 @@ export default async function runDeploy(ftpSettings: FtpSettings, ftpBasePath: s
     }
 
     const entryFilePath = path.join(distPath, nodeFile);
+    console.log("init game");
     const m = await import(entryFilePath);
+    console.log("init game");
     const Game = m.Game;
     const gameInstance = new Game();
     const gameTheme = gameInstance.theme;

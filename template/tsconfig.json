@@ -19,7 +19,8 @@
     "jsx": "react-jsx",
     "inlineSourceMap": true,
     "inlineSources": true,
-    "typeRoots": ["./node_modules/@types", "./types"]
+    "typeRoots": ["./node_modules/@types", "./types"],
+    "plugins": [{ "name": "internal-strip-plugin" }]
   },
   "include": ["./src/**/*", "./globals.d.ts"]
 }

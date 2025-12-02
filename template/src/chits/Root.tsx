@@ -2,6 +2,7 @@ import { RootChit, DropdownChit, ChildOutlet } from "pretty-chitty";
 import { PlayerAid } from "./PlayerAid";
 import { MyPlayer } from "./MyPlayer";
 import { MainBoard } from "./MainBoard";
+import { LayoutNode } from "pretty-chitty";
 
 export class Root extends RootChit<MyPlayer> {
   @ChildOutlet public mainBoard = new MainBoard();
@@ -11,28 +12,44 @@ export class Root extends RootChit<MyPlayer> {
     return [this.playerAid];
   }
 
-  override getLayout(width: number, height: number) {
-    if (height > width) {
-      return [
+  override getLayout(width: number, height: number, playerId: string): LayoutNode {
+    return {
+      direction: "optimizePreferHorizontal",
+      collapseOrder: 5,
+      splits: [
         {
-          height: 2,
-          contents: this.mainBoard,
+          order: 1,
+          chit: this.mainBoard,
+          minWidth: 325,
+          minHeight: 270,
         },
-        { height: 1, contents: this.players.map((p) => p) },
-      ];
-    } else {
-      return [
         {
-          height: 1,
-          contents: [
+          direction: "optimizePreferHorizontal",
+          collapseOrder: 4,
+          splits: [
+            ...this.players
+              .filter((p) => p.id === playerId)
+              .map((p) => ({
+                order: 100,
+                minWidth: 325,
+                minHeight: 260,
+                chit: p,
+              })),
             {
-              width: 2,
-              contents: this.mainBoard,
+              direction: "optimizePreferVertical",
+              collapseOrder: 3,
+              splits: this.players
+                .filter((p) => p.id !== playerId)
+                .map((p, i) => ({
+                  order: i + 10,
+                  minWidth: 300,
+                  minHeight: 200,
+                  chit: p,
+                })),
             },
-            { width: 1, contents: this.players.map((p) => p) },
           ],
         },
-      ];
-    }
+      ],
+    };
   }
 }

@@ -127,6 +127,7 @@ export default (env) => {
       extensions: [".tsx", ".ts", ".js"],
 
       symlinks: false,
+
     },
   };
 };
