@@ -35,6 +35,13 @@ export default async function runDeploy(ftpSettings: FtpSettings, ftpBasePath: s
     gameJson.backgroundColor = gameTheme.backgroundColor;
     gameJson.foregroundColor = gameTheme.barActiveTextColor;
 
+    if (gameTheme.boxArt) {
+      gameJson.boxArt = publicUrlPath + files.find((file) => file === path.basename(gameTheme.boxArt));
+    }
+    if (gameTheme.screenshot) {
+      gameJson.screenshot = publicUrlPath + files.find((file) => file === path.basename(gameTheme.screenshot));
+    }
+
     const entryUrl = publicUrlPath + entryFile;
     const nodeUrl = publicUrlPath + nodeFile;
 

@@ -21,7 +21,12 @@ import { MainBoard } from "./chits/MainBoard";
 import { PlayerAid } from "./chits/PlayerAid";
 import { SampleStack } from "./canvas/SampleStack";
 
+import boxArt from "../static/boxArt.jpg";
+import screenshot from "../static/screenshot.png";
+
 const theme = GameTheme.withDefaults("#2d3142", "#ef8354");
+theme.boxArt = boxArt;
+theme.screenshot = screenshot;
 
 export default class GAME_NAME implements Game<MyPlayer, Root> {
   name = "GAME_NAME";
