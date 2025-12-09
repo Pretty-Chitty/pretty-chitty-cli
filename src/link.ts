@@ -28,7 +28,7 @@ export default async function link() {
   const updatePackageJson = async (filePath: string) => {
     const packageJsonPath = path.join(process.cwd(), "package.json");
     const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf-8"));
-    packageJson.dependencies["pretty-chitty"] = `file:${filePath}`;
+    packageJson.dependencies["@pretty-chitty/core"] = `file:${filePath}`;
     fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2));
   };
 

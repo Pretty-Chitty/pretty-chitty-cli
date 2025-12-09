@@ -1,6 +1,6 @@
 import React from "react";
 import { Color, Layered, Text } from "pretty-chitty/ReactCanvas";
-import { ParameterizedCanvas } from "pretty-chitty";
+import { ParameterizedCanvas } from "@pretty-chitty/core";
 
 // can be defined here?
 

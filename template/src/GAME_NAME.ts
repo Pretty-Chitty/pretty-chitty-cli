@@ -8,7 +8,7 @@ import {
   ChitRenderSpec,
   LightSpec,
   StaticImage,
-} from "pretty-chitty";
+} from "@pretty-chitty/core";
 import { Mesh, MeshPhongMaterial, PlaneGeometry } from "three";
 
 import { FlipButton } from "./buttons/FlipButton";
@@ -22,7 +22,7 @@ import { PlayerAid } from "./chits/PlayerAid";
 import { SampleStack } from "./canvas/SampleStack";
 
 import boxArt from "../static/boxArt.jpg";
-import screenshot from "../static/screenshot.png";
+import screenshot from "../static/screenshot.jpg";
 
 const theme = GameTheme.withDefaults("#2d3142", "#ef8354");
 theme.boxArt = boxArt;

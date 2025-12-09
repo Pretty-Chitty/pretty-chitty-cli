@@ -9,10 +9,10 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "color": "^4.2.3",
-    "pretty-chitty": "link:../pretty-chitty"
+    "@pretty-chitty/core": "link:../pretty-chitty"
   },
   "devDependencies": {
-    "pretty-chitty-cli": "link:../pretty-chitty-cli",
+    "@pretty-chitty/cli": "link:../pretty-chitty-cli",
     "@types/react": "^18.2.34",
     "@types/react-dom": "^18.2.14",
     "@types/three": "^0.158.1"

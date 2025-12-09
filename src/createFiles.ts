@@ -48,7 +48,7 @@ export async function createFiles() {
         name: "root.tsx",
         content: `import React from "react";
       import Game from "${path.join("..", packageJson.entry ?? packageJson.main)}";
-      import { GameDesigner } from "pretty-chitty";
+      import { GameDesigner } from "@pretty-chitty/core";
       
       export default function Root() {
         const game = new Game();
@@ -61,8 +61,8 @@ export async function createFiles() {
         import React from "react";
         import { createRoot } from "react-dom/client";
         import Game from "${path.join("..", packageJson.entry ?? packageJson.main)}";
-        import { ClientTrustMatchViewer } from "pretty-chitty";
-        import type { IMatchStorage } from "pretty-chitty";
+        import { ClientTrustMatchViewer } from "@pretty-chitty/core";
+        import type { IMatchStorage } from "@pretty-chitty/core";
         
         export function createClientTrustMatchViewer(container: HTMLElement, storage: IMatchStorage, playerId: string, players: IPlayerInfo[], onBack: () => void) {
           const root = createRoot(container);

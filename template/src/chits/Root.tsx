@@ -1,8 +1,8 @@
-import { RootChit, DropdownChit, ChildOutlet } from "pretty-chitty";
+import { RootChit, DropdownChit, ChildOutlet } from "@pretty-chitty/core";
 import { PlayerAid } from "./PlayerAid";
 import { MyPlayer } from "./MyPlayer";
 import { MainBoard } from "./MainBoard";
-import { LayoutNode } from "pretty-chitty";
+import { LayoutNode } from "@pretty-chitty/core";
 
 export class Root extends RootChit<MyPlayer> {
   @ChildOutlet public mainBoard = new MainBoard();

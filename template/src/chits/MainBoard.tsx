@@ -1,4 +1,4 @@
-import { Chit, PanelTab } from "pretty-chitty";
+import { Chit, PanelTab } from "@pretty-chitty/core";
 import { table } from "../assets/environment";
 
 export class MainBoard extends Chit {

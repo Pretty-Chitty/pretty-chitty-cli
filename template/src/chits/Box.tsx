@@ -1,5 +1,5 @@
 import { BoxGeometry, Mesh, MeshPhongMaterial } from "three";
-import { Chit, ChitRenderSpec } from "pretty-chitty";
+import { Chit, ChitRenderSpec } from "@pretty-chitty/core";
 import { BASE_SIZE } from "../consts";
 
 export class Box extends Chit {

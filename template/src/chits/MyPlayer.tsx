@@ -1,4 +1,4 @@
-import { PlayerChit, SparkChit, ChildOutlet } from "pretty-chitty";
+import { PlayerChit, SparkChit, ChildOutlet } from "@pretty-chitty/core";
 import { CounterChit } from "./CounterChit";
 
 export class MyPlayer extends PlayerChit {

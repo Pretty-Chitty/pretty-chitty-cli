@@ -1,5 +1,5 @@
 import React from "react";
-import { DropdownChit } from "pretty-chitty";
+import { DropdownChit } from "@pretty-chitty/core";
 
 export class PlayerAid extends DropdownChit {
   public turnCount = 0;
