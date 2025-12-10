@@ -20,7 +20,7 @@
     "inlineSourceMap": true,
     "inlineSources": true,
     "typeRoots": ["./node_modules/@types", "./types"],
-    "plugins": [{ "name": "internal-strip-plugin" }]
+    "plugins": [{ "name": "@pretty-chitty/ts" }]
   },
   "include": ["./src/**/*", "./globals.d.ts"]
 }
