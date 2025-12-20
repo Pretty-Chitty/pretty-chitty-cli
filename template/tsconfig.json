@@ -19,8 +19,7 @@
     "jsx": "react-jsx",
     "inlineSourceMap": true,
     "inlineSources": true,
-    "typeRoots": ["./node_modules/@types", "./types"],
-    "plugins": [{ "name": "@pretty-chitty/ts" }]
+    "typeRoots": ["./node_modules/@types", "./types"]
   },
   "include": ["./src/**/*", "./globals.d.ts"]
 }

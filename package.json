@@ -41,6 +41,7 @@
     "glob": "^11.0.0",
     "html-webpack-plugin": "^5.5.3",
     "inquirer": "^12.3.2",
+    "lru-cache": "^11.0.2",
     "mime": "^4.0.6",
     "node-fetch": "^3.3.2",
     "react": "^18.2.0",
@@ -58,8 +59,7 @@
     "typescript": "^5.4.2",
     "webpack": "^5.91.0",
     "webpack-cli": "^5.1.4",
-    "webpack-dev-server": "^4.15.1",
-    "lru-cache": "^11.0.2"
+    "webpack-dev-server": "^4.15.1"
   },
   "devDependencies": {
     "@types/chai": "^4",
@@ -67,7 +67,8 @@
     "@types/node": "^18",
     "@types/react": "^18.2.34",
     "@types/react-dom": "^18.2.14",
-    "null-loader": "^4.0.1"
+    "null-loader": "^4.0.1",
+    "source-map-loader": "^5.0.0"
   },
   "type": "module",
   "sideEffects": false

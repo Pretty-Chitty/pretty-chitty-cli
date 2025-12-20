@@ -57,6 +57,11 @@ export default (env) => {
     module: {
       rules: [
         {
+          test: /\.js$/,
+          enforce: "pre",
+          use: ["source-map-loader"],
+        },
+        {
           test: /\.(ts|tsx)$/,
           use: {
             loader: "babel-loader",
