@@ -1,10 +1,10 @@
 import { RootChit, DropdownChit, ChildOutlet } from "@pretty-chitty/core";
 import { PlayerAid } from "./PlayerAid";
-import { MyPlayer } from "./MyPlayer";
+import { Player } from "./Player";
 import { MainBoard } from "./MainBoard";
 import { LayoutNode } from "@pretty-chitty/core";
 
-export class Root extends RootChit<MyPlayer> {
+export class Root extends RootChit<Player> {
   @ChildOutlet public mainBoard = new MainBoard();
   @ChildOutlet public playerAid = new PlayerAid();
 

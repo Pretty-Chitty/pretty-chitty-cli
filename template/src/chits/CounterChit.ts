@@ -1,4 +1,4 @@
 import { SparkChit } from "@pretty-chitty/core";
-import { MyPlayer } from "./MyPlayer";
+import { Player } from "./Player";
 
 export class CounterChit extends SparkChit {}

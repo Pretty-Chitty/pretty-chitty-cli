@@ -16,7 +16,7 @@ import { ChitLibrary } from "./chits/ChitLibrary";
 import { CanvasLibrary } from "./canvas/CanvasLibrary";
 
 import { Root } from "./chits/Root";
-import { MyPlayer } from "./chits/MyPlayer";
+import { Player } from "./chits/Player";
 import { Box } from "./chits/Box";
 import { table } from "./assets/environment";
 
@@ -27,11 +27,8 @@ const theme = GameTheme.withDefaults("#2d3142", "#ef8354");
 theme.boxArt = boxArt;
 theme.screenshot = screenshot;
 
-export default class GAME_NAME implements Game<MyPlayer, Root> {
+export default class GAME_NAME implements Game<Player, Root> {
   name = "GAME_NAME";
-
-  galleryItemWidth = 300;
-  galleryItemSpacing = 20;
 
   chitLibrary = ChitLibrary;
   canvasLibrary = CanvasLibrary;
@@ -43,7 +40,7 @@ export default class GAME_NAME implements Game<MyPlayer, Root> {
     some_icon: { image: table },
   };
 
-  async run(setup: Turn<GameResult<MyPlayer>, MyPlayer, Root>, rootChit: Root) {
+  async run(setup: Turn<GameResult<Player>, Player, Root>, rootChit: Root) {
     await rootChit.players.shuffle();
     const players = rootChit.players.copy();
     players[0].color = "#ed00cb";
@@ -70,14 +67,6 @@ export default class GAME_NAME implements Game<MyPlayer, Root> {
     return {
       winners: [players[0]],
     };
-  }
-
-  generateRootChit() {
-    return new Root();
-  }
-
-  generatePlayer(playerInfo: PlayerInfo) {
-    return new MyPlayer(playerInfo);
   }
 
   renderDefaultRootChit(spec: ChitRenderSpec): void {

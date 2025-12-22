@@ -3,7 +3,7 @@ import { IChitLibrary } from "@pretty-chitty/core";
 import { Box } from "./Box";
 import { Root } from "./Root";
 import { MainBoard } from "./MainBoard";
-import { MyPlayer } from "./MyPlayer";
+import { Player } from "./Player";
 import { PlayerAid } from "./PlayerAid";
 
 export const ChitLibrary: IChitLibrary = {
@@ -11,5 +11,5 @@ export const ChitLibrary: IChitLibrary = {
   Root,
   MainBoard,
   PlayerAid,
-  MyPlayer,
+  Player,
 };
