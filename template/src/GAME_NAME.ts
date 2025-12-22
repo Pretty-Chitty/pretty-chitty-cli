@@ -11,7 +11,7 @@ import {
 } from "@pretty-chitty/core";
 import { Mesh, MeshPhongMaterial, PlaneGeometry } from "three";
 
-import * as ButtonLibrary from "./buttons/ButtonLibrary";
+import * as ButtonLibrary from "./ButtonLibrary";
 import { ChitLibrary } from "./chits/ChitLibrary";
 import { CanvasLibrary } from "./canvas/CanvasLibrary";
 
