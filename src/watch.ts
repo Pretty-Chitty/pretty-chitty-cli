@@ -4,8 +4,10 @@ import { spawn } from "child_process";
 import { URL } from "url";
 import chokidar from "chokidar";
 import { processDirectory } from "./resizer";
-import { readdir } from "fs/promises";
+import { readdir, access } from "fs/promises";
 import { createFiles } from "./createFiles";
+import { generateChitLibrary } from "./chitLibraryGenerator";
+import { generateCanvasLibrary } from "./canvasLibraryGenerator";
 
 // Function to extract the first subdirectory under a given base directory from a full path
 function getFirstSubdirectory(baseDir: string, filePath: string) {
@@ -75,10 +77,120 @@ function setupFileWatcher() {
   });
 }
 
+async function setupChitLibraryWatcher() {
+  const CHITS_DIR = "src/chits";
+
+  // Check if the chits directory exists
+  try {
+    await access(CHITS_DIR);
+  } catch {
+    // Directory doesn't exist, skip setup
+    return;
+  }
+
+  const chitWatcher = chokidar.watch(CHITS_DIR, {
+    ignored: /ChitLibrary\.ts$/,
+    persistent: true,
+    ignoreInitial: true,
+  });
+
+  let isProcessing = false;
+  let needsReprocessing = false;
+
+  async function processChitLibrary() {
+    if (isProcessing) {
+      needsReprocessing = true;
+      return;
+    }
+
+    needsReprocessing = false;
+    isProcessing = true;
+
+    try {
+      await generateChitLibrary(CHITS_DIR);
+    } catch (error) {
+      console.error("Error generating ChitLibrary:", error);
+    } finally {
+      isProcessing = false;
+      if (needsReprocessing) {
+        await processChitLibrary();
+      }
+    }
+  }
+
+  const handler = (p: string) => {
+    console.log(`Chit file changed: ${p}`);
+    processChitLibrary();
+  };
+
+  chitWatcher.on("change", handler);
+  chitWatcher.on("add", handler);
+  chitWatcher.on("unlink", handler);
+
+  // Generate initially
+  await processChitLibrary();
+}
+
+async function setupCanvasLibraryWatcher() {
+  const CANVAS_DIR = "src/canvas";
+
+  // Check if the canvas directory exists
+  try {
+    await access(CANVAS_DIR);
+  } catch {
+    // Directory doesn't exist, skip setup
+    return;
+  }
+
+  const canvasWatcher = chokidar.watch(CANVAS_DIR, {
+    ignored: /CanvasLibrary\.ts$/,
+    persistent: true,
+    ignoreInitial: true,
+  });
+
+  let isProcessing = false;
+  let needsReprocessing = false;
+
+  async function processCanvasLibrary() {
+    if (isProcessing) {
+      needsReprocessing = true;
+      return;
+    }
+
+    needsReprocessing = false;
+    isProcessing = true;
+
+    try {
+      await generateCanvasLibrary(CANVAS_DIR);
+    } catch (error) {
+      console.error("Error generating CanvasLibrary:", error);
+    } finally {
+      isProcessing = false;
+      if (needsReprocessing) {
+        await processCanvasLibrary();
+      }
+    }
+  }
+
+  const handler = (p: string) => {
+    console.log(`Canvas file changed: ${p}`);
+    processCanvasLibrary();
+  };
+
+  canvasWatcher.on("change", handler);
+  canvasWatcher.on("add", handler);
+  canvasWatcher.on("unlink", handler);
+
+  // Generate initially
+  await processCanvasLibrary();
+}
+
 export default async function runWebpackWatch() {
   await createFiles();
 
   setupFileWatcher();
+  await setupChitLibraryWatcher();
+  await setupCanvasLibraryWatcher();
 
   // Convert the module URL to a file path and get the directory name
   const __dirname = fileURLToPath(new URL(".", import.meta.url));

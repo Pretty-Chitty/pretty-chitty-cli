@@ -11,15 +11,14 @@ import {
 } from "@pretty-chitty/core";
 import { Mesh, MeshPhongMaterial, PlaneGeometry } from "three";
 
-import { FlipButton } from "./buttons/FlipButton";
+import * as ButtonLibrary from "./buttons/ButtonLibrary";
+import { ChitLibrary } from "./chits/ChitLibrary";
+import { CanvasLibrary } from "./canvas/CanvasLibrary";
+
 import { Root } from "./chits/Root";
 import { MyPlayer } from "./chits/MyPlayer";
 import { Box } from "./chits/Box";
 import { table } from "./assets/environment";
-import { CounterChit } from "./chits/CounterChit";
-import { MainBoard } from "./chits/MainBoard";
-import { PlayerAid } from "./chits/PlayerAid";
-import { SampleStack } from "./canvas/SampleStack";
 
 import boxArt from "../static/boxArt.jpg";
 import screenshot from "../static/screenshot.jpg";
@@ -34,9 +33,9 @@ export default class GAME_NAME implements Game<MyPlayer, Root> {
   galleryItemWidth = 300;
   galleryItemSpacing = 20;
 
-  chitLibrary = { Box, CounterChit, MainBoard, MyPlayer, PlayerAid, Root };
-  canvasLibrary = { SampleStack };
-  buttonLibrary = { FlipButton };
+  chitLibrary = ChitLibrary;
+  canvasLibrary = CanvasLibrary;
+  buttonLibrary = ButtonLibrary;
 
   theme = theme;
 

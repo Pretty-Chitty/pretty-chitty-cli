@@ -3,8 +3,10 @@ import { fileURLToPath } from "url";
 import { spawn } from "child_process";
 import { URL } from "url";
 import { processDirectory } from "./resizer";
-import { readdir, rm } from "fs/promises";
+import { readdir, rm, access } from "fs/promises";
 import { createFiles } from "./createFiles";
+import { generateChitLibrary } from "./chitLibraryGenerator";
+import { generateCanvasLibrary } from "./canvasLibraryGenerator";
 
 async function setupFileWatcher() {
   const ASSETS_DIR = "src/assets";
@@ -39,10 +41,48 @@ async function setupFileWatcher() {
   });
 }
 
+async function setupChitLibrary() {
+  const CHITS_DIR = "src/chits";
+
+  // Check if the chits directory exists
+  try {
+    await access(CHITS_DIR);
+  } catch {
+    // Directory doesn't exist, skip setup
+    return;
+  }
+
+  try {
+    await generateChitLibrary(CHITS_DIR);
+  } catch (error) {
+    console.error("Error generating ChitLibrary:", error);
+  }
+}
+
+async function setupCanvasLibrary() {
+  const CANVAS_DIR = "src/canvas";
+
+  // Check if the canvas directory exists
+  try {
+    await access(CANVAS_DIR);
+  } catch {
+    // Directory doesn't exist, skip setup
+    return;
+  }
+
+  try {
+    await generateCanvasLibrary(CANVAS_DIR);
+  } catch (error) {
+    console.error("Error generating CanvasLibrary:", error);
+  }
+}
+
 export default async function runWebpackBuild() {
   await createFiles();
 
-  setupFileWatcher();
+  await setupFileWatcher();
+  await setupChitLibrary();
+  await setupCanvasLibrary();
 
   // Convert the module URL to a file path and get the directory name
   const __dirname = fileURLToPath(new URL(".", import.meta.url));
