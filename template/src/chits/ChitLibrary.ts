@@ -6,7 +6,7 @@ import { MainBoard } from "./MainBoard";
 import { Player } from "./Player";
 import { PlayerAid } from "./PlayerAid";
 
-export const ChitLibrary: IChitLibrary = {
+export const ChitLibrary: IChitLibrary<Player, Root> = {
   Box,
   Root,
   MainBoard,

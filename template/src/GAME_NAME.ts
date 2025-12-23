@@ -41,7 +41,6 @@ export default class GAME_NAME implements Game<Player, Root> {
   };
 
   async run(setup: Turn<GameResult<Player>, Player, Root>, rootChit: Root) {
-    await rootChit.players.shuffle();
     const players = rootChit.players.copy();
     players[0].color = "#ed00cb";
     players[1].color = "#00edcb";

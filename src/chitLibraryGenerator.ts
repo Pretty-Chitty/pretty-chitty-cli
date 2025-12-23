@@ -23,24 +23,70 @@ async function parseFileForClasses(
   const content = await readFile(filePath, "utf-8");
   const classes: ClassDefinition[] = [];
 
-  // Match exported class declarations with extends clauses
-  // Pattern: export class ClassName extends BaseClass
-  // Also handles: export abstract class ClassName extends BaseClass
-  // Also handles generics: export class ClassName extends BaseClass<Type>
-  const classRegex = /export\s+(abstract\s+)?class\s+(\w+)\s+extends\s+(\w+)/g;
+  // Match exported class declarations
+  // First find all class declarations, then parse each one individually
+  const classStartRegex = /export\s+(abstract\s+)?class\s+(\w+)/g;
 
   let match;
-  while ((match = classRegex.exec(content)) !== null) {
-    const isAbstract = !!match[1]; // Check if 'abstract' keyword was captured
+  while ((match = classStartRegex.exec(content)) !== null) {
+    const isAbstract = !!match[1];
     const className = match[2];
-    const extendsFrom = match[3];
+    const startPos = match.index + match[0].length;
 
-    classes.push({
-      className,
-      extendsFrom,
-      filePath: path.relative(chitsDir, filePath),
-      isAbstract,
-    });
+    // From this position, find the extends clause
+    // We need to skip over any generic parameters first
+    let pos = startPos;
+    let angleDepth = 0;
+    let foundExtends = false;
+    let extendsFrom = "";
+
+    // Skip whitespace and generics
+    while (pos < content.length) {
+      const char = content[pos];
+
+      if (char === "<") {
+        angleDepth++;
+        pos++;
+      } else if (char === ">") {
+        angleDepth--;
+        pos++;
+      } else if (angleDepth === 0 && /\s/.test(char)) {
+        // Skip whitespace when not inside <>
+        pos++;
+      } else if (angleDepth === 0) {
+        // We're outside <> and hit a non-whitespace character
+        // Check if this is the start of 'extends'
+        if (content.substring(pos, pos + 7) === "extends") {
+          foundExtends = true;
+          pos += 7;
+          // Skip whitespace after 'extends'
+          while (pos < content.length && /\s/.test(content[pos])) {
+            pos++;
+          }
+          // Capture the base class name
+          const nameMatch = content.substring(pos).match(/^(\w+)/);
+          if (nameMatch) {
+            extendsFrom = nameMatch[1];
+          }
+          break;
+        } else {
+          // Hit something else, stop looking
+          break;
+        }
+      } else {
+        // Inside <>, keep going
+        pos++;
+      }
+    }
+
+    if (foundExtends && extendsFrom) {
+      classes.push({
+        className,
+        extendsFrom,
+        filePath: path.relative(chitsDir, filePath),
+        isAbstract,
+      });
+    }
   }
 
   return classes;
@@ -155,7 +201,7 @@ export async function generateChitLibrary(chitsDir: string): Promise<void> {
 
 ${imports.join("\n")}
 
-export const ChitLibrary: IChitLibrary = {
+export const ChitLibrary: IChitLibrary<Player, Root> = {
 ${libraryEntries.join("\n")}
 };
 `;
