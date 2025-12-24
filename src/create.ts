@@ -69,7 +69,7 @@ export default async function create() {
     console.error("Invalid name - must be all alphanumeric characters");
     process.exit(1);
   }
-  if (/$[0-9]/.test(name)) {
+  if (/^[0-9]/.test(name)) {
     console.error("Invalid name - cannot start with a number");
     process.exit(1);
   }

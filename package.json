@@ -1,9 +1,31 @@
 {
   "name": "@pretty-chitty/cli",
   "version": "1.0.0",
-  "main": "index.js",
-  "license": "MIT",
-  "module": "es2022",
+  "description": "Build and development tools for Pretty Chitty - a TypeScript framework for creating high-quality async or realtime 3D strategy board games",
+  "license": "Proprietary",
+  "licenseFilename": "LICENSE.md",
+  "author": "Josh Breckman <jbreckman@prettychitty.com>",
+  "homepage": "https://prettychitty.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/prettychitty/pretty-chitty-cli"
+  },
+  "bugs": {
+    "url": "https://github.com/prettychitty/pretty-chitty-cli/issues",
+    "email": "support@prettychitty.com"
+  },
+  "keywords": [
+    "board-game",
+    "game-engine",
+    "3d-games",
+    "strategy-games",
+    "typescript",
+    "react",
+    "threejs",
+    "game-development",
+    "cli",
+    "build-tool"
+  ],
   "bin": {
     "pretty-chitty-cli": "./bin/run.js"
   },

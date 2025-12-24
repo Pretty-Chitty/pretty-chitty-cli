@@ -1,0 +1,27 @@
+# Development files
+dist/
+node_modules/
+.git/
+.gitignore
+.eslintrc.json
+.eslintignore
+.babelrc
+*.log
+
+# IDE
+.vscode/
+.idea/
+.claude/
+
+# Test files
+*.test.ts
+*.spec.ts
+test/
+tests/
+__tests__/
+
+# Source maps (optional - include if you want them in the package)
+# *.map
+
+# TypeScript source (we'll keep these since tsx runs them)
+# src/**/*.ts will be kept for tsx execution
