@@ -7,6 +7,30 @@ import inquirer from "inquirer";
 import fs from "fs";
 import { processDirectory } from "./resizer";
 
+function showHelp() {
+  console.log(`
+Pretty Chitty CLI - Build tools for Pretty Chitty board games
+
+Usage:
+  pretty-chitty-cli <command>
+
+Commands:
+  create    Create a new game project from template
+  watch     Start development server with hot-reloading
+  build     Create production build
+  deploy    Build and deploy to FTP server
+  link      Link local @pretty-chitty/core package (for development)
+
+Examples:
+  pretty-chitty-cli create
+  pretty-chitty-cli watch
+  pretty-chitty-cli build
+  pretty-chitty-cli deploy
+
+For more information, visit: https://prettychitty.com
+`);
+}
+
 export async function cli(): Promise<void> {
   const [, , command] = process.argv;
 
@@ -29,6 +53,12 @@ export async function cli(): Promise<void> {
     }
     case "build": {
       await runWebpackBuild();
+      break;
+    }
+    case "help":
+    case "--help":
+    case "-h": {
+      showHelp();
       break;
     }
     case "deploy": {
@@ -54,6 +84,13 @@ export async function cli(): Promise<void> {
         ftpsettings.publicUrlPath
       );
       break;
+    }
+    default: {
+      if (command) {
+        console.error(`Error: Unknown command "${command}"\n`);
+      }
+      showHelp();
+      process.exit(command ? 1 : 0);
     }
   }
 }
