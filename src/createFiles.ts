@@ -64,10 +64,10 @@ export async function createFiles() {
         import { ClientTrustMatchViewer } from "@pretty-chitty/core";
         import type { IMatchStorage } from "@pretty-chitty/core";
         
-        export function createClientTrustMatchViewer(container: HTMLElement, storage: IMatchStorage, playerId: string, players: IPlayerInfo[], onBack: () => void) {
+        export function createClientTrustMatchViewer(container: HTMLElement, storage: IMatchStorage, playerId: string, players: IPlayerInfo[], onBack: () => void, onLoadProgress: (panelsCreated:number,panelsLoaded:number) => void) {
           const root = createRoot(container);
           const game = new Game();
-          root.render(<ClientTrustMatchViewer game={game} playerId={playerId} players={players} matchStorage={storage} onBack={onBack} />);
+          root.render(<ClientTrustMatchViewer game={game} playerId={playerId} players={players} matchStorage={storage} onBack={onBack} onLoadProgress={onLoadProgress} />);
         }
 
         export { Game };
