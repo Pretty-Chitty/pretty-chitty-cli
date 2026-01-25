@@ -1,6 +1,7 @@
 import fs from "fs";
 import path from "path";
 import ftp from "basic-ftp";
+import { execSync } from "child_process";
 
 export type FtpSettings = {
   hostname: string;
@@ -48,7 +49,28 @@ export default async function runDeploy(ftpSettings: FtpSettings, ftpBasePath: s
     gameJson.webEntry = entryUrl;
     gameJson.nodeEntry = nodeUrl;
 
-    console.log(JSON.stringify(gameJson, null, 2));
+    const publishedPayload = JSON.stringify(gameJson, null, 2);
+    console.log(publishedPayload);
+
+    // Write payload to publishedGame.json next to game.json
+    const publishedGamePath = path.join(process.cwd(), "publishedGame.json");
+    fs.writeFileSync(publishedGamePath, publishedPayload);
+    console.log(`Wrote payload to ${publishedGamePath}`);
+
+    // Copy to clipboard (works on macOS, Windows, and Linux with xclip)
+    try {
+      const platform = process.platform;
+      if (platform === "darwin") {
+        execSync("pbcopy", { input: publishedPayload });
+      } else if (platform === "win32") {
+        execSync("clip", { input: publishedPayload });
+      } else {
+        execSync("xclip -selection clipboard", { input: publishedPayload });
+      }
+      console.log("Payload copied to clipboard!");
+    } catch {
+      console.log("Could not copy to clipboard (clipboard tool not available)");
+    }
 
     const client = new ftp.Client();
 

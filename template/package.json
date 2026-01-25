@@ -9,7 +9,8 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "color": "^4.2.3",
-    "@pretty-chitty/core": "^1.1.1"
+    "@pretty-chitty/core": "^1.1.1",
+    "@fontsource/quicksand": "^5.2.10"
   },
   "devDependencies": {
     "@pretty-chitty/cli": "^1.0.0",
