@@ -79,6 +79,15 @@ export async function createFiles() {
         export { Game, Match, Connection };
         `,
       },
+      {
+        name: "entry-node.tsx",
+        content: `
+import Game from "${path.join("..", packageJson.entry ?? packageJson.main)}";
+import { Match, Connection } from "@pretty-chitty/core";
+
+export { Game, Match, Connection };
+`,
+      },
     ];
 
     // Create and write to files
