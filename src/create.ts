@@ -82,10 +82,9 @@ export default async function create() {
     .then(() => console.log("Directory copied successfully!"))
     .catch((err) => console.error("Failed to copy directory:", err));
 
-  // fix package.json
+  // fix package.json and main source file
   await replaceGameName(path.join(destDirectory, "package.json"), name);
   await replaceGameName(path.join(destDirectory, "src/GAME_NAME.ts"), name);
-  await replaceGameName(path.join(destDirectory, "game.json"), name);
   await fs.rename(path.join(destDirectory, "src/GAME_NAME.ts"), path.join(destDirectory, `src/${name}.ts`));
 
   process.exit();
