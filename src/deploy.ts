@@ -77,7 +77,7 @@ export default async function runDeploy(ftpSettings: FtpSettings, ftpBasePath: s
         });
       }
 
-      const buffer = await pipeline.jpeg({ quality: 85 }).toBuffer();
+      const buffer = await pipeline.jpeg({ quality: 95 }).toBuffer();
       const hash = crypto.createHash("sha256").update(new Uint8Array(buffer)).digest("hex").slice(0, 8);
       const outputFile = `${baseName}.${hash}.jpg`;
       const outputPath = path.join(distPath, outputFile);

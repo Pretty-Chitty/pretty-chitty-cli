@@ -135,7 +135,7 @@ export default (env) => {
           exclude: /node_modules/,
         },
         {
-          test: /(\.svg)|(inline\.png)|(inline\.jpg)/,
+          test: /(\.svg)|(inline\.png)|(inline\.jpg)|(\.glb)/,
           type: isNode ? "asset/resource" : "asset/inline",
         },
         {
