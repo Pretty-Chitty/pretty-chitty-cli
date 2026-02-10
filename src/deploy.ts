@@ -1,5 +1,6 @@
 import fs from "fs";
 import path from "path";
+import { pathToFileURL } from "url";
 import crypto from "crypto";
 import ftp from "basic-ftp";
 import { execSync } from "child_process";
@@ -37,7 +38,7 @@ export default async function runDeploy(ftpSettings: FtpSettings, ftpBasePath: s
 
     const entryFilePath = path.join(distPath, nodeFile);
     console.log("init game");
-    const m = await import(entryFilePath);
+    const m = await import(pathToFileURL(entryFilePath).href);
     console.log("init game");
     const Game = m.Game;
     const gameInstance = new Game();
