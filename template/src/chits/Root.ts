@@ -1,10 +1,21 @@
-import { RootChit, DropdownChit, ChildOutlet } from "@pretty-chitty/core";
+import { RootChit, DropdownChit, ChildOutlet, Selectable, LayoutNode } from "@pretty-chitty/core";
 import { PlayerAid } from "./PlayerAid";
 import { Player } from "./Player";
 import { MainBoard } from "./MainBoard";
-import { LayoutNode } from "@pretty-chitty/core";
 
 export class Root extends RootChit<Player> {
+  minPlayers = 2;
+  maxPlayers = 4;
+
+  @Selectable({
+    label: "Custom Parameter",
+    choices: [
+      { label: "Choice 1", id: "a" },
+      { label: "Choice 2", id: "b" },
+    ],
+  })
+  public customParameter: "a" | "b" = "a";
+
   @ChildOutlet public mainBoard = new MainBoard();
   @ChildOutlet public playerAid = new PlayerAid();
 

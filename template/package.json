@@ -13,7 +13,7 @@
     "@fontsource/quicksand": "^5.2.10"
   },
   "devDependencies": {
-    "@pretty-chitty/cli": "^1.1.0",
+    "@pretty-chitty/cli": "^1.2.0",
     "@types/react": "^18.2.34",
     "@types/react-dom": "^18.2.14",
     "typescript": "^5.9.0"
