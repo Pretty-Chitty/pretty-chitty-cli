@@ -8,8 +8,11 @@ import {
   ChitRenderSpec,
   LightSpec,
   StaticImage,
+  GameMetaData,
 } from "@pretty-chitty/core";
 import { Mesh, MeshPhongMaterial, PlaneGeometry } from "three";
+import "@fontsource/quicksand/400.css";
+import "@fontsource/quicksand/700.css";
 
 import * as ButtonLibrary from "./ButtonLibrary";
 import { ChitLibrary } from "./chits/ChitLibrary";
@@ -24,11 +27,25 @@ import boxArt from "../static/boxArt.jpg";
 import screenshot from "../static/screenshot.jpg";
 
 const theme = GameTheme.withDefaults("#2d3142", "#ef8354");
-theme.boxArt = boxArt;
-theme.screenshot = screenshot;
+theme.fontFamily = "Quicksand, sans-serif";
 
 export default class GAME_NAME implements Game<Player, Root> {
-  name = "GAME_NAME";
+  metadata = {
+    name: "GAME_NAME",
+    licenseInformation: "<license info>",
+    implementationNotes: "<any rule changes or ambiguity>",
+    publisher: "<publisher>",
+    designer: "<designer>",
+    artist: "<artist>",
+    tutorialVideoUrl: "<tutorial video URL>",
+    rulesPdfUrl: "<rules PDF URL>",
+    purchaseUrl: "<purchase URL>",
+    publisherUrl: "<publisher URL>",
+    repositoryUrl: "<repository URL>",
+    description: "<game description>",
+    boxArt,
+    screenshot,
+  } as GameMetaData;
 
   chitLibrary = ChitLibrary;
   canvasLibrary = CanvasLibrary;
@@ -76,7 +93,7 @@ export default class GAME_NAME implements Game<Player, Root> {
         map: StaticImage.texture(table, scale),
         bumpMap: StaticImage.texture(table, scale),
         bumpScale: 30,
-      })
+      }),
     );
     mesh.position.z = -0.02;
     spec.ornaments.push(mesh);

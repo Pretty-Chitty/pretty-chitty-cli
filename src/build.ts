@@ -90,7 +90,7 @@ export default async function runWebpackBuild() {
   let webpackPath;
   try {
     // This finds the entry point of the webpack module
-    const webpackEntryPoint = await import.meta.resolve("webpack");
+    const webpackEntryPoint = await import.meta.resolve!("webpack");
     // Construct the path to the webpack binary
     webpackPath = path.resolve(fileURLToPath(webpackEntryPoint), "../../bin/webpack.js");
   } catch (error) {

@@ -113,9 +113,9 @@ pretty-chitty-cli deploy
    - FTP password
    - Remote path on the FTP server
    - Public URL path (maps to remote path)
-2. Auto-increments the version number in `game.json`
-3. Loads the Node.js bundle to extract game metadata (theme colors, box art, screenshots)
-4. Updates `game.json` with theme information and asset URLs
+2. Auto-increments the patch version in `package.json`
+3. Loads the Node.js bundle to extract game metadata (name, description, box art, screenshots) and theme colors
+4. Generates `publishedGame.json` with all metadata and asset URLs
 5. Uploads all files from `dist` to the FTP server
 6. Skips files that already exist on the server (incremental uploads)
 
@@ -152,7 +152,6 @@ your-game/
 │   ├── canvas/          # Canvas components (game screens)
 │   └── YourGame.ts      # Main game entry point
 ├── dist/                # Production build output
-├── game.json            # Game metadata and configuration
 ├── package.json         # Project dependencies and scripts
 └── .ftpsettings.json    # FTP deployment settings (git-ignored)
 ```
