@@ -14,6 +14,8 @@ type SpriteResizeRule = {
   maxDimensionOfMicroMap?: number;
   format?: "jpg" | "png";
   fit?: "inside" | "outside";
+  /** png only: write the sheet as a 256-colour palette PNG (libimagequant, dithered) — ~5x smaller for painted art */
+  palette?: boolean;
 };
 
 export type SpriteDirectorySpec = {
@@ -65,6 +67,7 @@ function getSpecForFile(fileName: string, spec: SpriteDirectorySpec) {
 
 type ResultingFile = {
   format: "jpg" | "png";
+  palette?: boolean;
   inputFiles: string[];
   totalPixels: number;
 };
@@ -118,7 +121,10 @@ async function processSprite(f: ResultingFile, destinationFile: string) {
     );
   })) as SpritesmithResult<Buffer>;
 
-  await sharp(result.image).toFile(destinationFile);
+  const image = sharp(result.image);
+  await (f.format === "png" && f.palette ? image.png({ palette: true, quality: 90, effort: 10, dither: 1 }) : image).toFile(
+    destinationFile
+  );
 
   return result.coordinates;
 }
@@ -229,10 +235,13 @@ export async function processDirectory(directory: string, targetDirectory: strin
       // find or create the resulting file to use
       const size = info.width * info.height;
       let f = files.find(
-        (f) => f.format === spec.format && f.totalPixels + size < (spec.maxPixelsPerFile ?? 10000000000)
+        (f) =>
+          f.format === spec.format &&
+          !!f.palette === !!spec.palette &&
+          f.totalPixels + size < (spec.maxPixelsPerFile ?? 10000000000)
       );
       if (!f) {
-        f = { format: spec.format ?? "png", inputFiles: [], totalPixels: 0 };
+        f = { format: spec.format ?? "png", palette: spec.palette, inputFiles: [], totalPixels: 0 };
         files.push(f);
       }
 

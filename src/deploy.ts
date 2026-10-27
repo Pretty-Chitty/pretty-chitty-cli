@@ -12,6 +12,31 @@ export type FtpSettings = {
   password: string;
 };
 
+/**
+ * Version of the @pretty-chitty/core the game bundles, read from the nearest node_modules above the game
+ * (core's exports map hides its package.json from require.resolve), or undefined if it cannot be found.
+ */
+function readCoreVersion(): string | undefined {
+  let dir = process.cwd();
+  for (;;) {
+    const candidate = path.join(dir, "node_modules", "@pretty-chitty", "core", "package.json");
+    if (fs.existsSync(candidate)) {
+      try {
+        return JSON.parse(fs.readFileSync(candidate, "utf-8")).version;
+      } catch (error) {
+        console.warn(`Could not read ${candidate}:`, error);
+        return undefined;
+      }
+    }
+    const parent = path.dirname(dir);
+    if (parent === dir) {
+      console.warn("Could not determine bundled @pretty-chitty/core version: package not found in node_modules");
+      return undefined;
+    }
+    dir = parent;
+  }
+}
+
 export default async function runDeploy(ftpSettings: FtpSettings, ftpBasePath: string, publicUrlPath: string) {
   try {
     // Read and bump version in package.json
@@ -26,6 +51,10 @@ export default async function runDeploy(ftpSettings: FtpSettings, ftpBasePath: s
 
     // Extract major version
     const majorVersion = parseInt(versionParts[0]);
+
+    // Core is bundled into each game, so record which core version this build carries. Hosts use it to
+    // tell which bundles support newer engine features (AI seats, for one) before offering them.
+    const coreVersion = readCoreVersion();
 
     const distPath = path.join(process.cwd(), "dist");
     const files = fs.readdirSync(distPath);
@@ -54,6 +83,7 @@ export default async function runDeploy(ftpSettings: FtpSettings, ftpBasePath: s
       maxPlayers: rootChit.maxPlayers,
       configurationOptions: rootChit.getConfigurationOptions(),
       version: packageJson.version,
+      coreVersion,
       backgroundColor: gameTheme.backgroundColor,
       foregroundColor: gameTheme.barActiveTextColor,
       ...gameMetadata,

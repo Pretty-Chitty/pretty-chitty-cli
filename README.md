@@ -115,7 +115,7 @@ pretty-chitty-cli deploy
    - Public URL path (maps to remote path)
 2. Auto-increments the patch version in `package.json`
 3. Loads the Node.js bundle to extract game metadata (name, description, box art, screenshots) and theme colors
-4. Generates `publishedGame.json` with all metadata and asset URLs
+4. Generates `publishedGame.json` with all metadata and asset URLs, plus `coreVersion`: the `@pretty-chitty/core` version bundled into this build, so hosts can tell which bundles support newer engine features such as AI seats
 5. Uploads all files from `dist` to the FTP server
 6. Skips files that already exist on the server (incremental uploads)
 

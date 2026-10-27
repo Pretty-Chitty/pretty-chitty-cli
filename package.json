@@ -1,6 +1,6 @@
 {
   "name": "@pretty-chitty/cli",
-  "version": "1.2.1",
+  "version": "2.0.0",
   "description": "Build and development tools for Pretty Chitty - a TypeScript framework for creating high-quality async or realtime 3D strategy board games",
   "license": "Proprietary",
   "licenseFilename": "LICENSE.md",
@@ -75,6 +75,7 @@
     "source-map-loader": "^5.0.0",
     "spritesmith": "^3.4.1",
     "style-loader": "^4.0.0",
+    "terser-webpack-plugin": "^5.3.10",
     "tmp": "^0.2.1",
     "tmp-promise": "^3.0.3",
     "ts-jest": "^29.1.1",

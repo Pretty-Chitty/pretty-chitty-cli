@@ -62,12 +62,42 @@ export async function createFiles() {
         import { createRoot } from "react-dom/client";
         import Game from "${path.join("..", packageJson.entry ?? packageJson.main)}";
         import { Match, Connection, ClientTrustMatchViewer, ServerTrustMatchViewer, DemoWrapper } from "@pretty-chitty/core";
-        import type { IMatchStorage } from "@pretty-chitty/core";
-        
-        export function createClientTrustMatchViewer(container: HTMLElement, storage: IMatchStorage, playerId: string, players: IPlayerInfo[], onBack: () => void, onLoadProgress: (panelsCreated:number,panelsLoaded:number) => void, options: any) {
+        import type { IMatchStorage, IPlayerInfo, SeatAiPlayersOptions } from "@pretty-chitty/core";
+
+        /**
+         * \`ai.seat\` seats a bot on every player whose \`IPlayerInfo.ai\` is set (\`true\` or the
+         * \`seatAiPlayers\` options). \`ai.enabled\` says whether this copy of the match drives those bots;
+         * every client-trust tab runs its own copy, so the host elects one driver and flips the rest off
+         * through the returned \`setAiEnabled\`.
+         */
+        export function createClientTrustMatchViewer(
+          container: HTMLElement,
+          storage: IMatchStorage,
+          playerId: string,
+          players: IPlayerInfo[],
+          onBack: () => void,
+          onLoadProgress: (panelsCreated: number, panelsLoaded: number) => void,
+          options: any,
+          ai?: { seat?: boolean | SeatAiPlayersOptions; enabled?: boolean },
+        ) {
           const root = createRoot(container);
           const game = new Game();
-          root.render(<ClientTrustMatchViewer game={game} playerId={playerId} players={players} matchStorage={storage} onBack={onBack} onLoadProgress={onLoadProgress} options={options} />);
+          const render = (aiEnabled: boolean) =>
+            root.render(
+              <ClientTrustMatchViewer
+                game={game}
+                playerId={playerId}
+                players={players}
+                matchStorage={storage}
+                onBack={onBack}
+                onLoadProgress={onLoadProgress}
+                options={options}
+                seatAi={ai?.seat ?? false}
+                aiEnabled={aiEnabled}
+              />,
+            );
+          render(ai?.enabled ?? true);
+          return { setAiEnabled: render, unmount: () => root.unmount() };
         }
 
         export function createServerTrustMatchViewer(container: HTMLElement, playerId: string, transport: ConnectionTransport, onBack: () => void, onLoadProgress: (panelsCreated:number,panelsLoaded:number) => void) {
