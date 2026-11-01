@@ -37,6 +37,54 @@ function readCoreVersion(): string | undefined {
   }
 }
 
+/**
+ * One way a host can start the game without a lobby, as listed in publishedGame.json (`demos`): the
+ * plain demo (you against bots) or a scripted tutorial. The host passes its `id` to the web bundle's
+ * `createDemoMatchViewer(container, { demo: id })`.
+ */
+export type PublishedDemo = {
+  id: string;
+  kind: "demo" | "tutorial";
+  /** In the first locale listed */
+  title: string;
+  /** Tutorials: the locales it comes in (`createDemoMatchViewer`'s `locale` picks one), and its title in each */
+  locales?: string[];
+  titles?: Record<string, string>;
+  /** Tutorials: how many steps it has, and the tutorials it assumes the player has done */
+  steps?: number;
+  requires?: string[];
+};
+
+/** The plain demo, then every tutorial the game declares (`Game.tutorials`), one entry per id */
+export function listDemos(game: { tutorials?: { id: string; locale: string; title: string; steps: unknown[]; requires?: string[] }[] }): PublishedDemo[] {
+  const demos: PublishedDemo[] = [{ id: "demo", kind: "demo", title: "Demo" }];
+  const byId = new Map<string, PublishedDemo>();
+  for (const t of game.tutorials ?? []) {
+    if (t.id === "demo") {
+      console.warn('A tutorial has the id "demo", which is the plain demo\'s: it is left out of the list. Rename it.');
+      continue;
+    }
+    const known = byId.get(t.id);
+    if (known) {
+      known.locales!.push(t.locale);
+      known.titles![t.locale] = t.title;
+      continue;
+    }
+    const entry: PublishedDemo = {
+      id: t.id,
+      kind: "tutorial",
+      title: t.title,
+      locales: [t.locale],
+      titles: { [t.locale]: t.title },
+      steps: t.steps.length,
+      requires: t.requires ?? [],
+    };
+    byId.set(t.id, entry);
+    demos.push(entry);
+  }
+  return demos;
+}
+
 export default async function runDeploy(ftpSettings: FtpSettings, ftpBasePath: string, publicUrlPath: string) {
   try {
     // Read and bump version in package.json
@@ -77,7 +125,8 @@ export default async function runDeploy(ftpSettings: FtpSettings, ftpBasePath: s
 
     // Build the published payload from package.json and game metadata
     const publishedJson: Record<string, any> = {
-      id: packageJson.name,
+      // The game id is a stable, lowercase name used in site URLs; package.json names are often capitalized
+      id: packageJson.name.toLowerCase(),
       major: majorVersion,
       minPlayers: rootChit.minPlayers,
       maxPlayers: rootChit.maxPlayers,
@@ -87,6 +136,8 @@ export default async function runDeploy(ftpSettings: FtpSettings, ftpBasePath: s
       backgroundColor: gameTheme.backgroundColor,
       foregroundColor: gameTheme.barActiveTextColor,
       ...gameMetadata,
+      // What a host can start without a lobby: the plain demo and each tutorial (see PublishedDemo)
+      demos: listDemos(gameInstance),
     };
 
     // Process and optimize images

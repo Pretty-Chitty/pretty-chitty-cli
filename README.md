@@ -115,7 +115,16 @@ pretty-chitty-cli deploy
    - Public URL path (maps to remote path)
 2. Auto-increments the patch version in `package.json`
 3. Loads the Node.js bundle to extract game metadata (name, description, box art, screenshots) and theme colors
-4. Generates `publishedGame.json` with all metadata and asset URLs, plus `coreVersion`: the `@pretty-chitty/core` version bundled into this build, so hosts can tell which bundles support newer engine features such as AI seats
+4. Generates `publishedGame.json` with all metadata and asset URLs, plus `coreVersion`: the `@pretty-chitty/core` version bundled into this build, so hosts can tell which bundles support newer engine features such as AI seats. It also lists `demos`: every way a host can start the game without a lobby, the plain demo and each tutorial the game declares (`Game.tutorials`):
+
+   ```json
+   "demos": [
+     { "id": "demo", "kind": "demo", "title": "Demo" },
+     { "id": "tutorial", "kind": "tutorial", "title": "How to play", "locales": ["en"], "titles": { "en": "How to play" }, "steps": 111, "requires": [] }
+   ]
+   ```
+
+   A host starts one by its `id` with the web bundle's `createDemoMatchViewer` (see [Embedding a demo](#embedding-a-demo)).
 5. Uploads all files from `dist` to the FTP server
 6. Skips files that already exist on the server (incremental uploads)
 
@@ -141,6 +150,25 @@ The first time you run deploy, you'll be prompted for FTP settings. These are sa
 
 ---
 
+## Embedding a demo
+
+The web bundle (`webEntry` in `publishedGame.json`) exports `createDemoMatchViewer`, which renders a
+game against bots into an element: the plain demo, or a tutorial by its id from `demos`.
+
+```ts
+const { createDemoMatchViewer } = await import(publishedGame.webEntry);
+const demo = createDemoMatchViewer(document.getElementById("game")!, {
+  demo: "tutorial",       // an id from publishedGame.json's `demos`; "demo" or none is the plain demo
+  locale: "en",           // a tutorial's translation (one of its `locales`)
+  onBack: () => demo.unmount(),
+  onTutorialEvent: (e) => console.log(e.type), // "started" | "step" | "satisfied" | "completed" | "skipped"
+});
+```
+
+An unknown id runs the plain demo (with a warning in the console). Bundles built before `demos` was
+published take only the element and always run the plain demo. In development, `watch` serves the
+same thing full screen at `/demo?tutorial=<id>`.
+
 ## Project Structure
 
 ```
@@ -159,6 +187,7 @@ your-game/
 ## Development Tips
 
 - **Assets**: Place image files in subdirectories under `src/assets/`. Each subdirectory is processed into a sprite sheet.
+- **Audio**: `import url from "./narration.mp3"` (also `.ogg`, `.wav`, `.m4a`) emits the file and gives its URL, e.g. for tutorial narration. Keep audio outside `src/assets/`, which is for sprite sheets.
 - **Chits**: Create game piece components in `src/chits/`. The ChitLibrary is auto-generated.
 - **Canvas**: Create screen/view components in `src/canvas/`. The CanvasLibrary is auto-generated.
 - **Hot Reload**: The dev server supports hot module replacement for rapid iteration.

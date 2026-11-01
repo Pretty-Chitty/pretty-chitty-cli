@@ -62,7 +62,7 @@ export async function createFiles() {
         import { createRoot } from "react-dom/client";
         import Game from "${path.join("..", packageJson.entry ?? packageJson.main)}";
         import { Match, Connection, ClientTrustMatchViewer, ServerTrustMatchViewer, DemoWrapper } from "@pretty-chitty/core";
-        import type { IMatchStorage, IPlayerInfo, SeatAiPlayersOptions } from "@pretty-chitty/core";
+        import type { DemoWrapperProps, IMatchStorage, IPlayerInfo, SeatAiPlayersOptions } from "@pretty-chitty/core";
 
         /**
          * \`ai.seat\` seats a bot on every player whose \`IPlayerInfo.ai\` is set (\`true\` or the
@@ -106,10 +106,38 @@ export async function createFiles() {
           root.render(<ServerTrustMatchViewer game={game} playerId={playerId} transport={transport} onBack={onBack} onLoadProgress={onLoadProgress} />);
         }
 
-        export function createDemoMatchViewer(container: HTMLElement) {
+        /**
+         * A game against bots, in the page: the plain demo, or one of the game's tutorials by id. The ids
+         * are publishedGame.json's \`demos\` ("demo" is the plain demo, also what no id gives).
+         * \`locale\` picks a tutorial's translation; \`onBack\` is the back button (and where a tutorial
+         * that ends with "back" goes); \`onTutorialEvent\` reports its progress. \`onLoadProgress\` is the
+         * same panel-loading callback the match viewers take, so the host can hold its loading screen
+         * until the board is drawn.
+         */
+        export function createDemoMatchViewer(
+          container: HTMLElement,
+          options: {
+            demo?: string;
+            locale?: string;
+            onBack?: () => void;
+            onLoadProgress?: (panelsCreated: number, panelsLoaded: number) => void;
+            onTutorialEvent?: DemoWrapperProps["onTutorialEvent"];
+          } = {},
+        ) {
           const root = createRoot(container);
           const game = new Game();
-          root.render(<DemoWrapper game={game} />);
+          const tutorial = options.demo && options.demo !== "demo" ? options.demo : undefined;
+          root.render(
+            <DemoWrapper
+              game={game}
+              tutorial={tutorial}
+              locale={options.locale}
+              onBack={options.onBack}
+              onLoadProgress={options.onLoadProgress}
+              onTutorialEvent={options.onTutorialEvent}
+            />,
+          );
+          return { unmount: () => root.unmount() };
         }
 
         export { Game, Match, Connection };

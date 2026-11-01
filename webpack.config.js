@@ -144,6 +144,12 @@ export default (env) => {
           type: "asset/resource",
         },
         {
+          // Audio (tutorial narration, sound effects): emitted as files and imported as their URL.
+          // Keep audio out of src/assets, whose subdirectories are packed into sprite sheets.
+          test: /\.(mp3|ogg|wav|m4a)$/,
+          type: "asset/resource",
+        },
+        {
           test: /\.(css|sass|scss)$/,
           use: isNode ? "null-loader" : [{ loader: "style-loader" }, { loader: "css-loader" }],
         },
